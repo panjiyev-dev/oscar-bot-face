@@ -1,0 +1,14 @@
+{
+"name": "telegram-mini-app-bot",
+"version": "1.0.0",
+"description": "A Telegram bot that opens a Mini App on /start command.",
+"main": "app.js",
+"scripts": {
+"start": "node app.js"
+},
+"dependencies": {
+"node-telegram-bot-api": "^0.61.0"
+},
+"author": "Gemini",
+"license": "ISC"
+}
