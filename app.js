@@ -10,7 +10,7 @@ const bot = new TelegramBot(token, { polling: true });
 
 // Mini App URL'sini bu yerga kiriting
 // Bu sizning mini ilovangiz joylashgan manzil bo'ladi
-const webAppUrl = 'https://frabjous-souffle-7abdfc.netlify.app/';
+const webAppUrl = 'https://oscar-front.vercel.app/';
 
 // /start buyrug'iga javob berish
 bot.onText(/\/start/, (msg) => {
@@ -37,5 +37,6 @@ bot.onText(/\/start/, (msg) => {
 });
 
 console.log('Bot ishga tushdi!');
+
 
 
