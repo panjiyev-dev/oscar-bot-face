@@ -2,7 +2,7 @@
 const TelegramBot = require('node-telegram-bot-api');
 
 // Sizning bot tokeningizni bu yerga kiriting
-const token = '8486406073:AAEU6DXvtRuBpeZPbhdtfu6Wwx-p5RGs0Ug';
+const token = '8445730557:AAEEbdgOlkLzUGtcV92iu9X9kDCNL3BgnO4';
 
 // Bot instansiyasini yaratish
 const bot = new TelegramBot(token, { polling: true });
