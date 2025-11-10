@@ -1,55 +1,14 @@
-// // Kerakli kutubxonalarni import qilish
-// const TelegramBot = require('node-telegram-bot-api');
-
-// // Sizning bot tokeningizni bu yerga kiriting
-// // Uni @BotFather'dan olishingiz mumkin
-// const token = '8445730557:AAE3wmU89MCBKtD0eZVBxVAYPsDTUizcB1E';
-
-// // Bot instansiyasini yaratish
-// const bot = new TelegramBot(token, { polling: true });
-
-// // Mini App URL'sini bu yerga kiriting
-// // Bu sizning mini ilovangiz joylashgan manzil bo'ladi
-// const webAppUrl = 'https://oscar-front.vercel.app/';
-
-// // /start buyrug'iga javob berish
-// bot.onText(/\/start/, (msg) => {
-//     const chatId = msg.chat.id;
-
-//     // Mini ilovani ochish uchun tugma yaratish
-//     const opts = {
-//         reply_markup: {
-//             inline_keyboard: [
-//                 [
-//                     {
-//                         text: 'Ilovani ochish',
-//                         web_app: {
-//                             url: webAppUrl
-//                         }
-//                     }
-//                 ]
-//             ]
-//         }
-//     };
-
-//     // Foydalanuvchiga xabar yuborish
-//     bot.sendMessage(chatId, 'Xush kelibsiz! Mini ilovamizdan foydalanish uchun quyidagi tugmani bosing 👇', opts);
-// });
-
-// console.log('Bot ishga tushdi!');
 // Kerakli kutubxonalarni import qilish
 const TelegramBot = require('node-telegram-bot-api');
 
 // Sizning bot tokeningizni bu yerga kiriting
-// Uni @BotFather'dan olishingiz mumkin
-const token = '8125620993:AAG23LOOrtNpvNQHbUvaju64kJNUlJbAlno';
+const token = '8486406073:AAEU6DXvtRuBpeZPbhdtfu6Wwx-p5RGs0Ug';
 
 // Bot instansiyasini yaratish
 const bot = new TelegramBot(token, { polling: true });
 
-// Mini App URL'sini bu yerga kiriting
-// Bu sizning mini ilovangiz joylashgan manzil bo'ladi
-const webAppUrl = 'https://oscar-front.vercel.app';
+// Mini App URL'sini bu yerga kiriting (Endi HTTPS - Vercel URL)
+const webAppUrl = 'https://oscar-front.vercel.app/';
 
 // Admin ID (to'lov ma'lumotlarini yuborish uchun)
 const adminId = 7122472578;
@@ -62,7 +21,7 @@ bot.onText(/\/start/, (msg) => {
     const chatId = msg.chat.id;
     const username = msg.from.username || 'Noma\'lum';
 
-    // Mini ilovani ochish uchun tugma va tolov tugmasi
+    // Mini ilovani ochish uchun tugma va tolov tugmasi (Endi Web App ishlaydi, chunki HTTPS)
     const opts = {
         reply_markup: {
             inline_keyboard: [
@@ -121,7 +80,7 @@ bot.on('callback_query', (callbackQuery) => {
                 ]
             }
         };
-        bot.editMessageText('Tolov qilish usulini tanlang:', {
+        bot.editMessageText('Tolov qilish usulini tanlang va to\'lov qiling. Keyin chekni screenshot yoki PDF formatda yuboring:', {
             chat_id: chatId,
             message_id: message.message_id,
             reply_markup: opts.reply_markup
@@ -139,7 +98,7 @@ bot.on('callback_query', (callbackQuery) => {
     }
 });
 
-// Rasm yoki PDF yuborilganda (receipt sifatida)
+// Rasm yoki PDF yuborilganda (receipt sifatida) – xatolik ushlash qo'shildi
 bot.on('photo', (msg) => {
     const chatId = msg.chat.id;
     const state = userStates.get(chatId);
@@ -153,15 +112,22 @@ bot.on('photo', (msg) => {
     // Fayl nomini olish uchun (soddalashtirilgan: jpg)
     const fileName = 'receipt.jpg';
 
-    // Sana va vaqt
+    // Sana va vaqt (hozirgi sana: 10/11/2025 formatida)
     const now = new Date();
     const dateStr = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}, ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
     // Xabar formatini tayyorlash
     const formattedMessage = `Yangi to'lov cheki: PayMe dan\nFoydalanuvchi: [${username}](tg://user?id=${userId})\nFayl: ${fileName}\nSana: ${dateStr}`;
 
-    // Admin ga yuborish
-    bot.sendPhoto(adminId, fileId, { caption: formattedMessage, parse_mode: 'Markdown' });
+    // Admin ga yuborish – try-catch bilan
+    try {
+        bot.sendPhoto(adminId, fileId, { caption: formattedMessage, parse_mode: 'Markdown' });
+        console.log(`Chek admin'ga yuborildi: ${username}`);
+    } catch (error) {
+        console.error('Admin ga yuborishda xato:', error.message);
+        // Foydalanuvchiga xabar berish (ixtiyoriy)
+        bot.sendMessage(chatId, 'Chek qabul qilindi, lekin admin tasdiqlashda muammo bo\'ldi. Keyinroq tekshiring.');
+    }
 
     // Foydalanuvchiga tasdiq
     bot.sendMessage(chatId, 'Chek muvaffaqiyatli qabul qilindi! Rahmat.');
@@ -170,7 +136,7 @@ bot.on('photo', (msg) => {
     userStates.delete(chatId);
 });
 
-// PDF yuborilganda (document)
+// PDF yuborilganda (document) – xatolik ushlash qo'shildi
 bot.on('document', (msg) => {
     const chatId = msg.chat.id;
     const state = userStates.get(chatId);
@@ -186,11 +152,17 @@ bot.on('document', (msg) => {
     const now = new Date();
     const dateStr = `${now.getDate()}/${now.getMonth() + 1}/${now.getFullYear()}, ${now.getHours()}:${now.getMinutes()}:${now.getSeconds()}`;
 
-    // Xabar formatini tayyorlash (PayMe misoli, agar kerak bo'lsa method bo'yicha o'zgartirish mumkin)
+    // Xabar formatini tayyorlash
     const formattedMessage = `Yangi to'lov cheki: PayMe dan\nFoydalanuvchi: [${username}](tg://user?id=${userId})\nFayl: ${fileName}\nSana: ${dateStr}`;
 
-    // Admin ga yuborish
-    bot.sendDocument(adminId, fileId, { caption: formattedMessage, parse_mode: 'Markdown' });
+    // Admin ga yuborish – try-catch bilan
+    try {
+        bot.sendDocument(adminId, fileId, { caption: formattedMessage, parse_mode: 'Markdown' });
+        console.log(`PDF chek admin'ga yuborildi: ${username}`);
+    } catch (error) {
+        console.error('Admin ga yuborishda xato:', error.message);
+        bot.sendMessage(chatId, 'Chek qabul qilindi, lekin admin tasdiqlashda muammo bo\'ldi. Keyinroq tekshiring.');
+    }
 
     // Foydalanuvchiga tasdiq
     bot.sendMessage(chatId, 'Chek muvaffaqiyatli qabul qilindi! Rahmat.');
