@@ -65,12 +65,6 @@ bot.on('callback_query', (callbackQuery) => {
                     ],
                     [
                         {
-                            text: 'Karobka olmoqchiman',
-                            callback_data: 'request_box'
-                        }
-                    ],
-                    [
-                        {
                             text: 'UzumPay',
                             url: 'https://www.apelsin.uz/open-service?serviceId=498609633'
                         }
@@ -79,6 +73,12 @@ bot.on('callback_query', (callbackQuery) => {
                         {
                             text: 'Bekor qilish',
                             callback_data: 'cancel_payment'
+                        }
+                    ],
+                    [
+                        {
+                            text: 'Karobka olmoqchiman',
+                            callback_data: 'request_box'
                         }
                     ]
                 ]
@@ -139,7 +139,7 @@ bot.on('text', (msg) => {
         }
 
         // Foydalanuvchiga tasdiq
-        bot.sendMessage(chatId, 'Ma\'lumotlar muvaffaqiyatli yuborildi! Tez orada adminlarimiz sizga bog\'lanishadi. Rahmat.');
+        bot.sendMessage(chatId, 'Tez orada hodimlarimiz sizga bog\'lanishadi. Rahmat.');
         // Holatni tozalash
         userStates.delete(chatId);
     }
@@ -172,7 +172,7 @@ bot.on('photo', (msg) => {
         bot.sendMessage(chatId, 'Chek qabul qilindi, lekin admin tasdiqlashda muammo bo\'ldi. Keyinroq tekshiring.');
     }
     // Foydalanuvchiga tasdiq
-    bot.sendMessage(chatId, 'Chek muvaffaqiyatli qabul qilindi! Rahmat. Tez orada adminlarimiz sizga javob berishadi.');
+    bot.sendMessage(chatId, 'Tez orada hodimlarimiz sizga bog\'lanishadi.');
     // Holatni tozalash
     userStates.delete(chatId);
 });
@@ -202,9 +202,10 @@ bot.on('document', (msg) => {
         bot.sendMessage(chatId, 'Chek qabul qilindi, lekin admin tasdiqlashda muammo bo\'ldi. Keyinroq tekshiring.');
     }
     // Foydalanuvchiga tasdiq
-    bot.sendMessage(chatId, 'Chek muvaffaqiyatli qabul qilindi! Rahmat. Tez orada adminlarimiz sizga javob berishadi.');
+    bot.sendMessage(chatId, 'Tez orada hodimlarimiz sizga bog\'lanishadi.');
     // Holatni tozalash
     userStates.delete(chatId);
 });
 
 console.log('Bot ishga tushdi!');
+
